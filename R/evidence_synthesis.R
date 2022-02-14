@@ -1,3 +1,8 @@
+# env Options -------------------------------------------------------------
+# Set number of processing cores:
+options(mc.cores = parallel::detectCores())
+
+
 # Simple Fixed Effects model ----------------------------------------------
 # Example found in Evidence Synthesis for Medical Decision Making, 
 # Example 4.1, pages 78-81 rewritten in Stan.
