@@ -2,7 +2,7 @@ data {
  int <lower = 0> J;         // define number of schools as int, with lower bound 0
  real <lower = 0> sigma[J]; // s.e.'s of effect estimates (between schools),
                             // lower bound 0
- real y[J];                 // linear predictor, estimated treatment effects                            
+ real y[J];                 // linear response, estimated treatment effects
  
 }
 
