@@ -77,33 +77,22 @@ r_t <- c(4, 6, 3, 62, 33, 180, 8, 505, 29, 17, 186, 5, 27)
 n_t <- c(123, 306, 231, 13598, 5069, 1541, 2545, 88391, 7499, 1716, 
         50634, 2498, 16913)
 # Latitude of studies:
-
+lat <- c(44, 55, 42, 52, 13, 44, 19, 13, -27, 42, 18, 33, 33)
 # Data list for Stan input:
-data_list <- list(N = length(n_c), 
+data_list <- list(N = length(n_c), lat = lat,
                   r_t = r_t, r_c = r_c, 
                   n_t = n_t, n_c = n_c)
 # Run model:
 bin_random_Effects <- stan(file = "stan/binom_random_Effects.stan",
-                           data = data_list, chains = 4)
+                           data = data_list, chains = 4, 
+                           control = list(adapt_delta = 0.9))
 print(bin_random_Effects)
 
 sims_bin_random_Effects <- extract(bin_random_Effects)
-hist(sims_bin_random_Effects$p_t)
+hist(sims_bin_random_Effects$d)
+# Above hist shows treatment decreases probability versus control reference
 
 # Inspection:
-mcmc_dens(bin_random_Effects)
-mcmc_trace(bin_random_Effects, pars = "mu[5]")
-mcmc_trace_highlight(bin_random_Effects, pars = "mu[5]")
-
-
-
-
-
-
-
-
-
-
-
-
-
+mcmc_dens(bin_random_Effects, pars = "d")
+mcmc_trace(bin_random_Effects, pars = "d")
+mcmc_trace_highlight(bin_random_Effects, pars = "d")
