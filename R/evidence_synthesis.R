@@ -80,12 +80,11 @@ n_t <- c(123, 306, 231, 13598, 5069, 1541, 2545, 88391, 7499, 1716,
 
 # Data list for Stan input:
 data_list <- list(N = length(n_c), 
-                  r_t = r_t, 
-                  n_t = n_t)
+                  r_t = r_t, r_c = r_c, 
+                  n_t = n_t, n_c = n_c)
 # Run model:
 bin_random_Effects <- stan(file = "stan/binom_random_Effects.stan",
-                           data = data_list, 
-                           chains = 4, refresh = 500)
+                           data = data_list, chains = 4)
 print(bin_random_Effects)
 
 sims_bin_random_Effects <- extract(bin_random_Effects)
