@@ -1,29 +1,28 @@
 data {
-  int <lower = 0> J;
-  int <lower = 0> n_t[J];  // num cases, treatment
-  int <lower = 0> r_t[J];  // num successes, treatment
-  int <lower = 0> n_c[J];  // num cases, control
-  int <lower = 0> r_c[J];  // num successes, control
+  int <lower = 0> N;
+  int <lower = 0> n_t[N];  // num cases, treatment
+  int <lower = 0> r_t[N];  // num successes, treatment
 }
 parameters {
-  real mu[J];            // mean treatment effect
-  real <lower=0> tau;  // deviation of treatment effects
-  real eta[J];
+ vector[N] alpha_star;
+ vector[N] delta;
+ real tau;
+ real nu;
+ 
 }
 transformed parameters {
- real theta[J];      // per-trial treatment effect
- for (j in 1:J) {
-  theta[j] = logit(mu[j] + eta[j]);
- }
+ real OR;
+ vector[N] mu;
+ real p_t;
+ OR = exp(nu);
+ p_t = 1 / (1 + OR);
+ mu = alpha_star + delta;
+ 
 }
 model {
- for (j in 1:J) {
- // Likelihood
- 
- 
- 
- 
- // Random intercept/effect
-  mu[j] ~ normal(0, 10);
- }
+ nu ~ normal(0, 1.0E6);
+ tau ~ cauchy(0, 5);
+ alpha_star ~ normal(0.0, 1.0E4);
+ delta ~ normal(nu, tau);
+ r_t ~ binomial_logit(n_t, mu);
 }

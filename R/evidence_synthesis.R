@@ -79,16 +79,22 @@ n_t <- c(123, 306, 231, 13598, 5069, 1541, 2545, 88391, 7499, 1716,
 # Latitude of studies:
 
 # Data list for Stan input:
-data_list <- list(J = length(r_c), 
-                  r_c = r_c, r_t = r_t, 
-                  n_c = n_c, n_t = n_t)
+data_list <- list(N = length(n_c), 
+                  r_t = r_t, 
+                  n_t = n_t)
 # Run model:
 bin_random_Effects <- stan(file = "stan/binom_random_Effects.stan",
-                           data = data_list, chains = 4, 
-                           refresh = 500)
+                           data = data_list, 
+                           chains = 4, refresh = 500)
 print(bin_random_Effects)
 
+sims_bin_random_Effects <- extract(bin_random_Effects)
+hist(sims_bin_random_Effects$p_t)
 
+# Inspection:
+mcmc_dens(bin_random_Effects)
+mcmc_trace(bin_random_Effects, pars = "mu[5]")
+mcmc_trace_highlight(bin_random_Effects, pars = "mu[5]")
 
 
 
